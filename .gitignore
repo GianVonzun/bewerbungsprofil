@@ -1,0 +1,7 @@
+# PDF-Bauquellen & Original-Backups (nicht für die Live-Seite nötig)
+documents-src/
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
