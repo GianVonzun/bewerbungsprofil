@@ -19,6 +19,7 @@
 
   <!-- Shared modules data -->
   <script src="js/modules-data.js"></script>
+  <script src="js/projects-data.js"></script>
 
   <style>
     /* ===================== RESET & BASE ===================== */
@@ -2297,63 +2298,7 @@ const skills = [
   }
 ];
 
-const projects = [
-  {
-    title: 'HugoSMP – Gaming-Plattform',
-    type: 'privat',
-    category: 'Full-Stack Web-App',
-    year: '2024',
-    desc: 'Vollständige Web-Plattform mit 15 Skill-Games, Login, In-Game-Währung und Minecraft-Bot-Anbindung. Echtzeit-Multiplayer über Socket.io.',
-    emoji: '<i class="fas fa-gamepad"></i>',
-    gradient: 'linear-gradient(135deg,#0d1a07,#1a2a07)',
-    techs: ['Node.js', 'Express', 'Socket.io', 'MySQL', 'Mineflayer'],
-    link: '#'
-  },
-  {
-    title: 'Moneto – Taschengeld-Tracker',
-    type: 'privat',
-    category: 'Web-App',
-    year: '2025',
-    desc: 'App zur Verwaltung von Taschengeld und Abos mit KI-gestützter Bankanalyse. Geplant als PWA mit späterem Release im Play Store.',
-    emoji: '<i class="fas fa-wallet"></i>',
-    gradient: 'linear-gradient(135deg,#07101a,#071a2a)',
-    techs: ['React', 'Express', 'KI/AI', 'PWA'],
-    link: '#'
-  },
-  {
-    title: 'MailAgent – KI Mail-Sortierung',
-    type: 'privat',
-    category: 'Desktop-App',
-    year: '2025',
-    desc: 'Electron-Desktop-App, die eingehende E-Mails mit Cloud-KI automatisch in eigene Kategorien einsortiert. Start mit Gmail-Anbindung.',
-    emoji: '<i class="fas fa-envelope-open-text"></i>',
-    gradient: 'linear-gradient(135deg,#1a0a2e,#0d0d1a)',
-    techs: ['Electron', 'JavaScript', 'KI/AI', 'Gmail API'],
-    link: '#'
-  },
-  {
-    title: 'ACE Clan – Vorstellungs-Website',
-    type: 'privat',
-    category: 'Web-Entwicklung',
-    year: '2025',
-    desc: 'Animierte Präsentations-Website für einen Gaming-Clan mit interaktiven Popups, Clan-Fakten und Discord-Anbindung.',
-    emoji: '<i class="fas fa-trophy"></i>',
-    gradient: 'linear-gradient(135deg,#2a0712,#1a0720)',
-    techs: ['HTML5', 'CSS3', 'JavaScript', 'Animationen'],
-    link: '#'
-  },
-  {
-    title: 'E-Portfolio & Bewerbungsprofil',
-    type: 'schule',
-    category: 'Web-Entwicklung · IMS',
-    year: '2026',
-    desc: 'Dieses Online-Bewerbungsprofil und mein E-Portfolio aus dem Informatikunterricht — entwickelt im Rahmen von IDAF IV. Diese Seite, die du gerade siehst.',
-    emoji: '<i class="fas fa-globe"></i>',
-    gradient: 'linear-gradient(135deg,#071a1a,#0a2a1a)',
-    techs: ['HTML5', 'CSS3', 'JavaScript', 'GSAP'],
-    link: '#hero'
-  }
-];
+// Projektdaten ausgelagert in js/projects-data.js (Konstante `projects`)
 
 // ===================== DOCUMENTS (LOGIN-GESCHÜTZTER BEREICH) =====================
 // Passwort für die Bewerbungsunterlagen. ÄNDERE DIES auf dein Wunschpasswort.
@@ -2422,8 +2367,14 @@ function renderSkills() {
 // ===================== RENDER PROJECTS =====================
 function renderProjects() {
   const grid = document.getElementById('projects-grid');
-  grid.innerHTML = projects.map((p, i) => `
-    <div class="project-card reveal reveal-delay-${(i % 4) + 1}">
+  grid.innerHTML = projects.map((p, i) => {
+    const href = p.detail ? `pages/project.html?id=${p.id}` : (p.link || '#');
+    const external = href.startsWith('http');
+    const clickAttr = p.detail ? `onclick="location.href='pages/project.html?id=${p.id}'" style="cursor:pointer"` : '';
+    const linkIcon = p.detail ? 'fa-arrow-right' : 'fa-arrow-up-right-from-square';
+    const linkTitle = p.detail ? 'Mehr erfahren' : 'Ansehen';
+    return `
+    <div class="project-card reveal reveal-delay-${(i % 4) + 1}" ${clickAttr}>
       <div class="project-thumbnail">
         <div class="project-thumb-bg" style="background: ${p.gradient}">
           <span style="position:relative;z-index:1;color:rgba(255,255,255,0.92)">${p.emoji}</span>
@@ -2439,11 +2390,11 @@ function renderProjects() {
         <p class="project-desc">${p.desc}</p>
         <div class="project-footer">
           <div class="project-techs">${p.techs.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-          <a href="${p.link}" class="project-link" title="Projekt ansehen" ${p.link.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}><i class="fas fa-arrow-up-right-from-square"></i></a>
+          <a href="${href}" class="project-link" title="${linkTitle}" onclick="event.stopPropagation()" ${external ? 'target="_blank" rel="noopener"' : ''}><i class="fas ${linkIcon}"></i></a>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 // ===================== MODAL =====================
